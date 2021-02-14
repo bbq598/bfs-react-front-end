@@ -1,10 +1,9 @@
 const initialState = {
-    init : "init",
+    init : "initinti",
     counter : 0,
     clickTimes: 0,
     user:[],
     index : 0,
-
 }
 
 
@@ -39,7 +38,7 @@ export default function appReducer(state = initialState, action){
         case 'SETINDEX' : {
             return{
                 ...state,
-                index : action.payload,
+                index : [action.payload],
             }
         }
 
