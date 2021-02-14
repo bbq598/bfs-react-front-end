@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
+import {connect} from 'react-redux'
 import TimeSheetInner from './TimeSheetInner'
 import WeekSelect from './WeekSelect'
 import UploadFile from './UploadFile'
 import ComputeHours from './ComputeHours'
 
 // represents the entire timesheet page
-export default class TimeSheet extends Component {    
+export class TimeSheet extends Component {
     render() {
         var timesheetId = 0;
         // use MDBootstrap grid system
@@ -45,3 +46,18 @@ export default class TimeSheet extends Component {
     updateTimesheet() {
     }
 }
+
+const mapStateToProps = (state) =>{
+  return{
+      user : state.user,
+      index : state.index
+  }
+};
+
+const mapDispatchToProps = (dispatch) =>{
+  return{
+      setTimesheet: (payload) => dispatch(console.log(payload))
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TimeSheet);
