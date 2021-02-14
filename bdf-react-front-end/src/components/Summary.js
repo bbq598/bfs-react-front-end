@@ -85,7 +85,7 @@ class Summary extends Component {
                        : ""  } </td> 
                       <td>{item.approvalStatus} </td> 
                       <td > <MDBBtn gradient="peach" onClick={()=>this.handleSetIndex(index)}>{item.submissionStatus == "Incomplete"|| item.submissionStatus == "Not Start" ? "edit":"view"}</MDBBtn></td>
-                      <td>comment</td>
+                      <td>{item.floatingDay > 0 && item.submissionStatus == "Incomplete"? item.floatingDay + " floating day required" : " " }</td>
                     </tr>                                  
                     )
                   }
