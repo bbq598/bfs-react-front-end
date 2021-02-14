@@ -1,3 +1,6 @@
+import axios from 'axios';
+
+
 export const setIncrease = (payload) =>{
     return{
         type :'INCREASE',
@@ -18,5 +21,18 @@ export const setIndex = (payload) =>{
     return{
         type:"SETINDEX",
         payload,
+    }
+}
+
+
+export const getData = () => {
+    return (dispatch) => {
+        const name = {"name" : "tiger"}
+        axios.post('http://localhost:8081/time/getTimeSheet',name).then(res => {
+            const { data } = res;
+            const action = setData(data);
+            dispatch(action);
+            console.log(data);
+        })
     }
 }

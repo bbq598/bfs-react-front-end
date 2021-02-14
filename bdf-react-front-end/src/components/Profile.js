@@ -95,6 +95,7 @@ class Profile extends Component {
 
 const mapStateToProps = (state) =>{
   return{
+      counter: state.counter,
       init: state.init,
       counter : state.counter,
       clickTimes : state.clickTimes

@@ -2,12 +2,16 @@ import React, { Component } from 'react'
 import { MDBTable, MDBTableBody, MDBTableHead } from 'mdbreact';
 import axios from 'axios';
 import { MDBTooltip, MDBBadge, MDBContainer,MDBBtn,MDBIcon } from "mdbreact";
-import { setIndex, setData } from '../actions/action';
+import { setIndex, setData,getData } from '../actions/action';
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux'
+import storage from 'redux-persist/lib/storage';
+import getStoredState from 'redux-persist/es/getStoredState';
+
 
 
 class Summary extends Component {
+
 
   state={
     users:[],
@@ -27,26 +31,28 @@ class Summary extends Component {
 
   handleSetIndex = (index) =>{
     this.props.setIndex(index);
+    this.props.setData(this.state.users);
   }
 
   componentDidMount(){
-    const name = {"name" : "tiger"}
-    const _this=this;    //先存一下this，以防使用箭头函数this会指向我们不希望它所指向的对象。
-    axios.post('http://localhost:8081/time/getTimeSheet',name)
-    .then(function (response) {
-      _this.setState({
-        users:response.data,
-        isLoaded:true
-      });
-      this.props.setData(response.data);
-    })
-    .catch(function (error) {
-      console.log(error);
-      _this.setState({
-        isLoaded:false,
-        error:error
-      })
-    })
+    this.props.getData();
+    // const name = {"name" : "tiger"}
+    // const _this=this;    //先存一下this，以防使用箭头函数this会指向我们不希望它所指向的对象。
+    // axios.post('http://localhost:8081/time/getTimeSheet',name)
+    // .then(function (response) {
+    //   _this.setState({
+    //     users:response.data,
+    //     isLoaded:true
+    //   });
+    //   this.props.setData(response.data);
+    // })
+    // .catch(function (error) {
+    //   console.log(error);
+    //   _this.setState({
+    //     isLoaded:false,
+    //     error:error
+    //   })
+    // })
   }
 
   render() {
@@ -61,11 +67,12 @@ class Summary extends Component {
           <th>Approval Status</th>
           <th>Option</th>
           <th>Comment</th>
+          <th>{this.props.init}</th>
         </tr>
       </MDBTableHead>
       <MDBTableBody>
         {
-          this.state.users.map((item,index)=>{
+          this.props.user.map((item,index)=>{
               if(index < this.state.index){
                     return(
                     <tr key={index}>
@@ -105,6 +112,7 @@ class Summary extends Component {
 
 const mapStateToProps = (state) =>{
   return{
+      init : state.init,
       user : state.user,
       index : state.index
   }
@@ -114,6 +122,7 @@ const mapDispatchToProps = (dispatch) =>{
   return{
       setData: (payload) => dispatch(setData(payload)),
       setIndex: (payload) => dispatch(setIndex(payload)),
+      getData : () => dispatch(getData()),
   }
 };
 
