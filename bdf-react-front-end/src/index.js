@@ -6,14 +6,18 @@ import reportWebVitals from './reportWebVitals';
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import appReducer from './reducers/reducer';
+import { PersistGate } from 'redux-persist/integration/react';
+import persistFunc from './store/persistedStore'; // redux-persist config
 
-const store = createStore(appReducer);
+const {store, persistor} = persistFunc();
+
+// now refreshing the page keeps the store's values
 ReactDOM.render(
   <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
     <App />
+    </PersistGate>
   </Provider>,
   document.getElementById('root')
 );
