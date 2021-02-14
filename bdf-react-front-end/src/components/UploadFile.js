@@ -1,9 +1,21 @@
+import { MDBCol, MDBRow } from 'mdbreact'
 import React, { Component } from 'react'
 
+// represents section B8
 export default class UploadFile extends Component {    
     render() {
       return (
-        <div>Upload File</div>
+        <MDBRow>
+          <MDBCol size="6" middle>
+            <select>
+              <option defaultValue>approved timesheet</option>
+              <option>unapproved timesheet</option>
+            </select>
+          </MDBCol>
+          <MDBCol size="6" middle>
+            <input type="file"/>
+          </MDBCol>
+        </MDBRow>
       )
     }
 }
