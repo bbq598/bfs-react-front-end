@@ -6,11 +6,15 @@ import reportWebVitals from './reportWebVitals';
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import appReducer from './reducers/reducer';
 
+const store = createStore(appReducer);
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <App />
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById('root')
 );
 
