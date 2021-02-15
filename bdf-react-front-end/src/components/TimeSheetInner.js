@@ -1,65 +1,67 @@
 import React, { Component } from 'react'
 import TimeSheetDay from './TimeSheetDay'
+import {connect} from 'react-redux'
 import axios from 'axios';
+
+import { setIndex, setData,getData } from '../actions/action';
 
 // represents the inner content: B2,3,4,5
 // TODO: expand functionalities
-export default class TimeSheetInner extends Component {
+export class TimeSheetInner extends Component {
     timesheetUrl = "http://localhost:8081/time" // gateway;
-    state = {timesheets:null};
+    // state = {};
     componentDidMount() {
-        // getting data from timesheet service
-        var userName = "tiger";
-        axios
-            .post(this.timesheetUrl+"/getTimeSheet", {
-                "name":userName
-            })
-          .then((resp) => {
-            console.log("Axios: data received:", resp.data);
-            this.setState({ timesheets: resp.data });
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        // this.props.getData();
+        console.log("Inner mounting");
     }
     
     render() {
-        // render first day
-        console.log("timesheet id:", this.props.timesheetId);
-        if (this.state.timesheets==null) {
+        if (!this.props.user[this.props.index]) {
           return <div></div>
         }
-        const items = [];
-        for (const x in this.state.timesheets[0].days[0]) {
-            items.push(<th key={x}>{x}</th>);
-        }
-        items.splice(3,0,<th key={"hours"}>Hours</th>);
         const days = [];
-        for (const [ind, day] of this.state.timesheets[0].days.entries()) {
-            days.push(<TimeSheetDay dayInfo = {day} key={ind}></TimeSheetDay>);
+        for (const [ind, day] of this.props.user[this.props.index].days.entries()) {
+            days.push(<TimeSheetDay
+                        dayInfo = {day}
+                        dayOfWeek = {ind} key={ind}
+                        flag = {this.props.flag}
+                        onChangeHandler= {(e)=>this.props.onChangeHandler(e)}
+                        ></TimeSheetDay>);
         }
         return (
-          <div>
-            <span>Displaying: first timesheet</span>
             <table className="table table-default">
               <thead>
-                <tr>{items}</tr>
+                <tr>
+                  <th>Day</th>
+                  <th>Date</th>
+                  <th>Starting Time</th>
+                  <th>Ending Time</th>
+                  <th>Total Hours</th>
+                  <th>Floating Day</th>
+                  <th>Holiday</th>
+                  <th>Vacation</th>
+                </tr>
               </thead>
               <tbody>{days}</tbody>
             </table>
-          </div>
         )
     }
-
-    updateTimesheet() {
-        axios
-            .post(this.timesheetUrl+"/updateWeekSheet", this.state)
-            .then((resp) => {
-                console.log(resp);
-                console.log(resp.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
 }
+
+const mapStateToProps = (state) =>{
+  return{
+      user : state.user,
+      index : state.index,
+      flag: state.flag
+  }
+};
+
+const mapDispatchToProps = (dispatch) =>{
+  return{
+      setData: (payload) => dispatch(setData(payload)),
+      setIndex: (payload) => dispatch(setIndex(payload)),
+      getData : () => dispatch(getData()),
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TimeSheetInner);

@@ -36,3 +36,23 @@ export const getData = () => {
         })
     }
 }
+
+export const setTimeSheet = (payload) =>{
+    return{
+        type :'SETTIMESHEET',
+        payload
+    }
+}
+
+export const setBilling = (payload) =>{
+    return{
+        type :'SETBILLING',
+        payload
+    }
+}
+
+export const toggleFlag = () =>{
+    return{
+        type :'SETFLAG'
+    }
+}

@@ -15,9 +15,11 @@ import { applyMiddleware } from 'redux';
 import reduxThunk from 'redux-thunk'
 
 
-
-const { persistor} = persistFunc();
-const store = createStore(appReducer, applyMiddleware(reduxThunk));
+ // see persistedStore.js: this configs the createStore and applies middleware of choice
+ // must use the store and persistor pair together
+const { store, persistor } = persistFunc();
+// const { persistor } = persistFunc();
+// const store = createStore(appReducer, applyMiddleware(reduxThunk));
 
 // now refreshing the page keeps the store's values
 ReactDOM.render(
