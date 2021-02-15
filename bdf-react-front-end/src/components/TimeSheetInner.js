@@ -13,7 +13,7 @@ export default class TimeSheetInner extends Component {
         axios
             .post(this.timesheetUrl+"/getTimeSheet", {
                 "name":userName
-            })
+            }, {headers:{Authorization: 'Bearer' + jwt}})
           .then((resp) => {
             console.log("Axios: data received:", resp.data);
             this.setState({ timesheets: resp.data });
@@ -53,7 +53,7 @@ export default class TimeSheetInner extends Component {
 
     updateTimesheet() {
         axios
-            .post(this.timesheetUrl+"/updateWeekSheet", this.state)
+            .post(this.timesheetUrl+"/updateWeekSheet", this.state, {headers:{Authorization: 'Bearer' + jwt}})
             .then((resp) => {
                 console.log(resp);
                 console.log(resp.data);

@@ -28,7 +28,7 @@ export const setIndex = (payload) =>{
 export const getData = () => {
     return (dispatch) => {
         const name = {"name" : "tiger"}
-        axios.post('http://localhost:8081/time/getTimeSheet',name).then(res => {
+        axios.post('http://localhost:8081/time/getTimeSheet',name, {headers:{Authorization: 'Bearer' + jwt}}).then(res => {
             const { data } = res;
             const action = setData(data);
             dispatch(action);
@@ -49,7 +49,7 @@ export const setContact = (payload) =>{
 export const getContact = () => {
     return (dispatch) => {
         const userId = {"userId" : "1"}
-        axios.post('http://localhost:8081/employee/getContactByUserId',userId).then(res => {
+        axios.post('http://localhost:8081/employee/getContactByUserId',userId, {headers:{Authorization: 'Bearer' + jwt}}).then(res => {
             const { data } = res;
             const action = setContact(data);
             dispatch(action);
