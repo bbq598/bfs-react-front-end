@@ -14,7 +14,7 @@ class Summary extends Component {
 
 
   state={
-    users:[],
+    // users:[],
     isLoaded:false,
     index : 5,
   }
@@ -31,7 +31,6 @@ class Summary extends Component {
 
   handleSetIndex = (index) =>{
     this.props.setIndex(index);
-    this.props.setData(this.state.users);
   }
 
   componentDidMount(){
@@ -67,7 +66,6 @@ class Summary extends Component {
           <th>Approval Status</th>
           <th>Option</th>
           <th>Comment</th>
-          <th>{this.props.init}</th>
         </tr>
       </MDBTableHead>
       <MDBTableBody>
