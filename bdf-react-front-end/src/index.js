@@ -5,11 +5,27 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import persistFunc from './store/persistedStore'; // redux-persist config
+import { createStore } from 'redux';
+import appReducer from './reducers/reducer';
+import { applyMiddleware } from 'redux';
+import reduxThunk from 'redux-thunk'
 
+
+
+const { persistor} = persistFunc();
+const store = createStore(appReducer, applyMiddleware(reduxThunk));
+
+// now refreshing the page keeps the store's values
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
     <App />
-  </React.StrictMode>,
+    </PersistGate>
+  </Provider>,
   document.getElementById('root')
 );
 
