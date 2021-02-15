@@ -50,9 +50,3 @@ export const setBilling = (payload) =>{
         payload
     }
 }
-
-export const toggleFlag = () =>{
-    return{
-        type :'SETFLAG'
-    }
-}

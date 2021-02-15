@@ -3,14 +3,12 @@ import React, { Component } from 'react'
 
 // represents a single day on the timesheet table.
 export default class TimeSheetDay extends Component {
-    state = {field:""};
     componentDidMount() {
       console.log("checking rerender");
     }
 
     refreshChangeHandler(e) {
       this.props.onChangeHandler(e);
-      this.setState({field:"ref"});
     }
     render() {
         const dayInfo = this.props.dayInfo;
@@ -40,8 +38,8 @@ export default class TimeSheetDay extends Component {
         const dayOfWeek = this.props.dayOfWeek;
         const dayMap = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
         const isWeekend = (dayOfWeek == 0 || dayOfWeek == 6);
-        const selectedStart = (isWeekend)?"N/A":(dayInfo.start=="N/A")?"09:00":dayInfo.start;
-        const selectedEnd = (isWeekend)?"N/A":(dayInfo.end=="N/A")?"18:00":dayInfo.end;
+        const selectedStart = (dayInfo.start=="N/A")?(isWeekend)?"N/A":"09:00":dayInfo.start;
+        const selectedEnd = (dayInfo.end=="N/A")?(isWeekend)?"N/A":"18:00":dayInfo.end;
         const floatingCheckId = "floatingDate_"+dayOfWeek;
         const holidaysCheckId = "holiday_"+dayOfWeek;
         const vacationCheckId = "vacation_"+dayOfWeek;
@@ -59,7 +57,7 @@ export default class TimeSheetDay extends Component {
               <td>
                 <select
                   id={"start_"+dayOfWeek}
-                  defaultValue={selectedStart}
+                  value={selectedStart}
                   onChange={(e)=>this.refreshChangeHandler(e)}
                   >
                   {hourSelectMaker()}
@@ -68,7 +66,7 @@ export default class TimeSheetDay extends Component {
               <td>
                 <select
                   id={"end_"+dayOfWeek}
-                  defaultValue={selectedEnd}
+                  value={selectedEnd}
                   onChange={(e)=>this.refreshChangeHandler(e)}
                   >
                   {hourSelectMaker()}
@@ -77,7 +75,7 @@ export default class TimeSheetDay extends Component {
               <td>{
                 <select
                   id={"totalHours_"+dayOfWeek}
-                  defaultValue={hourDiff}
+                  value={hourDiff}
                   onChange={(e)=>this.refreshChangeHandler(e)}
                   >
                   {totalHourItems}
@@ -99,6 +97,7 @@ export default class TimeSheetDay extends Component {
                   id={holidaysCheckId}
                   defaultChecked={dayInfo.holiday}
                   onChange={(e)=>this.refreshChangeHandler(e)}
+                  disabled
                   />
                   <label className="custom-control-label" htmlFor={holidaysCheckId}></label>
                 </div>

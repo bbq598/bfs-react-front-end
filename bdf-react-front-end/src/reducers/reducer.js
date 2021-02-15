@@ -5,8 +5,7 @@ const initialState = {
     user:[],
     index : 0,
     currentTimeSheet: null,
-    billingHours:0,
-    flag:true,
+    billingHours:-1,
 }
 
 
@@ -56,13 +55,6 @@ export default function appReducer(state = initialState, action){
             return{
                 ...state,
                 billingHours: action.payload,
-            }
-        }
-
-        case 'SETFLAG' : {
-            return{
-                ...state,
-                flag: !state.flag,
             }
         }
 

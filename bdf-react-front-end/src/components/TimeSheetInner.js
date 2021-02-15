@@ -8,7 +8,6 @@ import { setIndex, setData,getData } from '../actions/action';
 // represents the inner content: B2,3,4,5
 // TODO: expand functionalities
 export class TimeSheetInner extends Component {
-    timesheetUrl = "http://localhost:8081/time" // gateway;
     // state = {};
     componentDidMount() {
         // this.props.getData();
@@ -16,15 +15,14 @@ export class TimeSheetInner extends Component {
     }
     
     render() {
-        if (!this.props.user[this.props.index]) {
+        if (!this.props.currentTimeSheet) {
           return <div></div>
         }
         const days = [];
-        for (const [ind, day] of this.props.user[this.props.index].days.entries()) {
+        for (const [ind, day] of this.props.currentTimeSheet.days.entries()) {
             days.push(<TimeSheetDay
                         dayInfo = {day}
                         dayOfWeek = {ind} key={ind}
-                        flag = {this.props.flag}
                         onChangeHandler= {(e)=>this.props.onChangeHandler(e)}
                         ></TimeSheetDay>);
         }
@@ -52,7 +50,7 @@ const mapStateToProps = (state) =>{
   return{
       user : state.user,
       index : state.index,
-      flag: state.flag
+      currentTimeSheet: state.currentTimeSheet
   }
 };
 

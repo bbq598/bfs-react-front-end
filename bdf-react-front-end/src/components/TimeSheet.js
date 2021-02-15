@@ -1,19 +1,17 @@
 import React, { Component } from 'react'
-import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
+import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdbreact";
+import { MDBTooltip, MDBBadge, MDBIcon } from "mdbreact";
 import {connect} from 'react-redux'
 import TimeSheetInner from './TimeSheetInner'
 import WeekSelect from './WeekSelect'
 import UploadFile from './UploadFile'
 import ComputeHours from './ComputeHours'
 import axios from 'axios'
-import { setTimeSheet, setBilling, toggleFlag } from '../actions/action'
+import { setTimeSheet, setBilling } from '../actions/action'
 
 // represents the entire timesheet page
 export class TimeSheet extends Component {
-    componentDidMount() {
-      this.props.setTimeSheet(this.props.user[this.props.index]);
-      if (this.props) console.log(this.props.currentTimeSheet);
-    }
+    // assume currentTimeSheet is set in redux
     render() {
         // use MDBootstrap grid system
         return (
@@ -28,9 +26,20 @@ export class TimeSheet extends Component {
             </MDBRow>
 
             <MDBRow>
-              <button id="defaultButton" type="button" className="btn btn-primary">Set Default</button>
+              <button id="defaultButton" onClick={(e)=>this.setDefault(e)} type="button" className="btn btn-primary">
+                Set Default
+                <MDBTooltip
+                        domElement
+                        tag="span"
+                        material
+                        placement="top"
+                        >               
+                  <span><MDBBadge className="ml-2">( i )</MDBBadge></span>
+                  <span>Save daily hours as default; future weekly timesheet will show same hours</span>
+                </MDBTooltip>
+              </button>
             </MDBRow>
-            <form onSubmit={(e)=>this.postTimeSheet(e)}> // form component for inputs
+            <form onSubmit={(e)=>this.postTimeSheet(e)}>
             <MDBRow>
               <TimeSheetInner onChangeHandler = {(e)=>this.onChangeHandler(e)}/>
             </MDBRow>
@@ -50,17 +59,25 @@ export class TimeSheet extends Component {
 
     postTimeSheet(e) {
       e.preventDefault();
-      console.log(this.state);
-      // var updateUrl = "http://localhost:8081/time/updateTimesheet";
-      var updateUrl = "";
+      var updateUrl = "http://localhost:8081/time/updateTimesheet";
+      // var updateUrl = "";
       axios
           .post(updateUrl, this.props.currentTimeSheet)
           .then((resp)=>{
             console.log(resp);
+            window.alert("Save successful!");
+            window.location.reload();
           })
           .catch((err)=>{
             console.log(err);
+            window.alert("Error posting!");
           })
+    }
+
+    setDefault = (e) => {
+      var currTimeSheet = this.props.currentTimeSheet;
+      // api call
+      window.alert("API call to set default timesheet!")
     }
 
     onChangeHandler = (e) => {
@@ -86,10 +103,18 @@ export class TimeSheet extends Component {
           if (currTimeSheet.days[dayIdx].start=="N/A") currTimeSheet.days[dayIdx].start="09:00";
           currTimeSheet.days[dayIdx].end =
             reverseHourMap[Math.min(hourMap[currTimeSheet.days[dayIdx].start]+(value-0),23)];
-        } else if (field=="start" && currTimeSheet.days[dayIdx].end=="N/A") {
-          currTimeSheet.days[dayIdx].end = "18:00";
-        } else if (field=="end" && currTimeSheet.days[dayIdx].start=="N/A") {
-          currTimeSheet.days[dayIdx].start = "09:00";
+        } else if (field=="start") {
+          if (value=="N/A") {
+            currTimeSheet.days[dayIdx].end = "N/A";
+          } else if (currTimeSheet.days[dayIdx].end=="N/A") {
+            currTimeSheet.days[dayIdx].end = "17:00";
+          }
+        } else if (field=="end") {
+          if (value=="N/A") {
+            currTimeSheet.days[dayIdx].start = "N/A";
+          } else if (currTimeSheet.days[dayIdx].start=="N/A") {
+            currTimeSheet.days[dayIdx].start = "09:00";
+          }
         }
       }
 
@@ -106,13 +131,11 @@ export class TimeSheet extends Component {
           billing+=hr; compensated+=hr;
         }
       }
-      console.log("billing: ", billing, ", compensated: ", compensated);
       currTimeSheet.totalHour = compensated;
       console.log(currTimeSheet);
+      this.props.setBilling(-1); // force refresh
       this.props.setBilling(billing);
       this.props.setTimeSheet(currTimeSheet);
-      console.log(this.props.billingHours);
-      this.props.toggleFlag();
     }
 }
 
@@ -122,7 +145,6 @@ const mapStateToProps = (state) =>{
       index : state.index,
       currentTimeSheet: state.currentTimeSheet,
       billingHours: state.billingHours,
-      flag: state.flag
   }
 };
 
@@ -130,7 +152,6 @@ const mapDispatchToProps = (dispatch) =>{
   return{
       setTimeSheet: (payload) => dispatch(setTimeSheet(payload)),
       setBilling: (payload) => dispatch(setBilling(payload)),
-      toggleFlag: (payload) => dispatch(toggleFlag(payload))
   }
 };
 

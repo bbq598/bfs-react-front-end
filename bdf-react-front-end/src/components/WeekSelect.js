@@ -1,6 +1,7 @@
 import { MDBCol, MDBRow } from 'mdbreact';
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { setIndex, setTimeSheet } from '../actions/action'
 
 // represents the week select part: section B1
 export class WeekSelect extends Component {
@@ -20,7 +21,7 @@ export class WeekSelect extends Component {
             Week Ending
           </MDBCol>
           <MDBCol>
-            <select onChange={(e)=>this.selectWeek(e)}>
+            <select onChange={(e)=>this.selectWeek(e)} value={this.props.index[0]}>
               {items}
             </select>
           </MDBCol>
@@ -30,7 +31,10 @@ export class WeekSelect extends Component {
 
     selectWeek = (e) => {
       e.preventDefault();
-      console.log(e.target.value)
+      if (window.confirm("Unsaved changes will be discarded!")) {
+        this.props.setIndex(e.target.value);
+        this.props.setTimeSheet(this.props.user[e.target.value]);
+      }
       // change index in store
     }
 }
@@ -38,13 +42,14 @@ export class WeekSelect extends Component {
 const mapStateToProps = (state) =>{
   return{
       user : state.user,
-      index : state.index
+      index : state.index,
   }
 };
 
 const mapDispatchToProps = (dispatch) =>{
   return{
-      setTimesheet: (payload) => dispatch(console.log(payload))
+      setIndex: (payload) => dispatch(setIndex(payload)),
+      setTimeSheet: (payload) => dispatch(setTimeSheet(payload))
   }
 };
 
