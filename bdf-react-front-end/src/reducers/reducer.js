@@ -1,9 +1,11 @@
+
 const initialState = {
     init : "initinti",
     counter : 0,
     clickTimes: 0,
     user:[],
     index : 0,
+    contact : "null",
 }
 
 
@@ -39,6 +41,13 @@ export default function appReducer(state = initialState, action){
             return{
                 ...state,
                 index : [action.payload],
+            }
+        }
+
+        case 'SETCONTACT' : {
+            return{
+                ...state,
+                contact: action.payload,
             }
         }
 

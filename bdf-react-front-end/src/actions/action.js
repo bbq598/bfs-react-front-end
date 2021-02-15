@@ -36,3 +36,23 @@ export const getData = () => {
         })
     }
 }
+
+
+export const setContact = (payload) =>{
+    return{
+        type:"SETCONTACT",
+        payload,
+    }
+}
+
+
+export const getContact = () => {
+    return (dispatch) => {
+        const userId = {"userId" : "1"}
+        axios.post('http://localhost:8081/employee/getContactByUserId',userId).then(res => {
+            const { data } = res;
+            const action = setContact(data);
+            dispatch(action);
+        })
+    }
+}
