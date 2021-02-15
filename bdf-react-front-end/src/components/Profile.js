@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { MDBContainer, MDBCol, MDBRow, MDBCard, MDBCardUp, MDBCardBody, MDBAvatar, MDBRotatingCard, MDBIcon } from "mdbreact";
+import { MDBContainer, MDBCol, MDBRow, MDBCard, MDBCardUp,  MDBBtn, MDBCardBody, MDBAvatar, MDBRotatingCard, MDBIcon,MDBInput } from "mdbreact";
 import axios from 'axios';
 import {connect} from 'react-redux';
 import {  setIncrease } from '../actions/action';
@@ -16,9 +16,21 @@ class Profile extends Component {
   // }
 
   state={
-      users:[],
+      users:{
+        phone : "1001001000",
+        email : "test@test.com",
+        homeAddress : "123 Fake Home Address, SomeCity, Some State 00000",
+        eclFirstName : "Emer",
+        eclLastName : "gency",
+        eclPhone : "91191191111",
+        ec2Firstname: "Another",
+        ec2LastName: "Emergency",
+        ec2Phone : "1191191119",
+      },
       isLoaded:false,
       flipped1: false,
+      value: "ok",
+
     }
 
 
@@ -28,23 +40,17 @@ class Profile extends Component {
       }
 
 
+      getValue = (value) =>{
+        console.log(value);
+      }
+
+      
+
+
+
+
       componentDidMount(){
-        const name = {"name" : "tiger"}
-        const _this=this;    //先存一下this，以防使用箭头函数this会指向我们不希望它所指向的对象。
-        axios.post('http://localhost:8081/time/getTimeSheet',name)
-        .then(function (response) {
-          _this.setState({
-            users:response.data,
-            isLoaded:true
-          });
-        })
-        .catch(function (error) {
-          console.log(error);
-          _this.setState({
-            isLoaded:false,
-            error:error
-          })
-        })
+
       }
 
 
@@ -58,28 +64,66 @@ class Profile extends Component {
           <MDBRotatingCard flipped={this.state.flipped1} className="text-center h-100 w-100">
             <MDBCard className="face front">
               <MDBCardBody>
-                <h4 className="font-weight-bold mb-3">Marie Johnson</h4>
-                <p className="font-weight-bold blue-text">Web developer</p>
+                
+                <p align ="left"> 
+                <b>Contact:</b>
+                <br></br>
+                {this.state.users.phone}<br/>
+                {this.state.users.email}<br/>
+                {this.state.users.homeAddress}<br/>
+                <br></br>
+                <b>Emergency Contact 1:</b>
+                <br></br>
+
+                <b>Emergency Contact 2:</b>
+                </p>
                 <a href="#!" className="rotate-btn text-dark" data-card="card-1" onClick={this.handleFlipping(1)}>
-                  <MDBIcon icon="redo" /> Click here to rotate
+                  <MDBIcon icon="redo" /> Edit
                 </a>
               </MDBCardBody>
             </MDBCard>
-            <MDBCard className="face back" style={{ height: "400px" }}>
+            <MDBCard className="face back" style={{ height: "700px" }}>
               <MDBCardBody>
-               <ul>
-                  {
-                    this.state.users.map((item,index)=>{
-                      if(index < 10){
-                        return(<li key={index}>{item.weekEnding}</li>)
-                      }
-                    })
-                  }
-
-               </ul>
+              <MDBContainer>
+          <MDBRow>
+            <MDBCol md="12">
+           <form>
+            <label htmlFor="defaultFormContactNameEx" className="grey-text">
+             Contact
+            </label>
+            <input type="text" id="defaultFormContactNameEx" className="form-control" defaultValue={this.state.value}/>
+            <br />
+            <input type="text" id="defaultFormContactNameEx" className="form-control" />
+            <br />
+            <input type="text" id="defaultFormContactNameEx" className="form-control" />
+            <br />
+        <label htmlFor="defaultFormContactEmailEx" className="grey-text">
+             Emergency Contact 1: 
+            </label>
+           <input type="email" id="defaultFormContactEmailEx" className="form-control" />
+            <br />
+            <input type="email" id="defaultFormContactEmailEx" className="form-control" />
+            <br />
+            <label htmlFor="defaultFormContactSubjectEx" className="grey-text">
+            Emergency Contact 1:
+           </label>
+              <input type="text" id="defaultFormContactSubjectEx" className="form-control" />
+              <br />
+              <input type="text" id="defaultFormContactSubjectEx" className="form-control" />
+              <br />
+              <div className="text-center mt-4">
+                  <MDBBtn color="warning" outline type="submit">
+                    Send
+                    <MDBIcon far icon="paper-plane" className="ml-2" />
+                  </MDBBtn>
+                </div>
+              </form>
+            </MDBCol>
+          </MDBRow>
+        </MDBContainer>
 
                 <a href="#!" className="rotate-btn text-dark" data-card="card-1" onClick={this.handleFlipping(1)}>
-                  <MDBIcon icon="undo" /> Click here to rotate back
+                  <MDBIcon icon="undo" /> Save
                 </a>
               </MDBCardBody>
             </MDBCard>
@@ -105,6 +149,7 @@ const mapStateToProps = (state) =>{
 const mapDispatchToProps = (dispatch) =>{
   return{
       increase: (payload) => dispatch(setIncrease(payload)),
+
   }
 };
 
