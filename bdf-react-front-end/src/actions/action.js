@@ -29,12 +29,11 @@ export const setIndex = (payload) =>{
 
 export const getData = () => {
     return (dispatch) => {
-        const name = {"name" : "tiger"}
-        api.post('http://localhost:8081/time/getTimeSheet',name).then(res => {
+        // const name = {"name" : "tiger"}
+        api.post('http://localhost:8081/time/getTimeSheet').then(res => {
             const { data } = res;
             const action = setData(data);
             dispatch(action);
-            console.log(data);
         })
         .catch( (error) =>{
             if(error.response.status === 2200){
@@ -66,9 +65,8 @@ export const setBilling = (payload) =>{
 
 export const getContact = () => {
     return (dispatch) => {
-        const userId = {"userId" : "1"}
-        api.post('http://localhost:8081/employee/getContactByUserId',userId).then(res => {
-
+        // const userId = {"userId" : "1"}
+        api.post('http://localhost:8081/employee/getContactByUserId').then(res => {
             const { data } = res;
             const action = setContact(data);
             dispatch(action);

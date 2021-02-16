@@ -151,7 +151,7 @@ window.location.reload(true);
                 </a>
               </MDBCardBody>
             </MDBCard>
-            <MDBCard className="face back" style={{ height: "900px" }}>
+            <MDBCard className="face back" style={{ height: "850px" }}>
               <MDBCardBody>
               <MDBContainer>
           <MDBRow>
@@ -191,9 +191,9 @@ window.location.reload(true);
                   <MDBBtn color="warning" onClick={this.onSubmit}>
                     Send
                   </MDBBtn>
-                  <MDBBtn color="warning" onClick={this.onClick}>
+                  {/* <MDBBtn color="warning" onClick={this.onClick}>
                     click
-                  </MDBBtn>
+                  </MDBBtn> */}
                 </div>
               </form>
             </MDBCol>
