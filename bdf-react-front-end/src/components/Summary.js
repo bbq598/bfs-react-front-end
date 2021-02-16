@@ -56,7 +56,7 @@ class Summary extends Component {
 
   componentDidMount(){
     this.props.getData();
-    Cookies.set('name', 'value');
+    // Cookies.set('name', 'value');
     // const name = {"name" : "tiger"}
     // const _this=this;    //先存一下this，以防使用箭头函数this会指向我们不希望它所指向的对象。
     // axios.post('http://localhost:8081/time/getTimeSheet',name)

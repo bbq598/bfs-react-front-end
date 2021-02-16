@@ -98,6 +98,11 @@ onSubmit = () =>{
     const { data } = res;
     console.log(data);
 })
+.catch( (error) =>{
+  if(error.response.status === 2200){
+      window.location.href = 'http://localhost:9999/auth?redirect=http://localhost:3000';
+  }
+})
 window.location.reload(true);
 }
 
