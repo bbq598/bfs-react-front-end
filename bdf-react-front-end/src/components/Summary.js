@@ -7,6 +7,7 @@ import {Link} from 'react-router-dom';
 import {connect} from 'react-redux'
 import storage from 'redux-persist/lib/storage';
 import getStoredState from 'redux-persist/es/getStoredState';
+import Cookies from 'js-cookie';
 
 
 
@@ -14,9 +15,10 @@ class Summary extends Component {
 
 
   state={
-    users:[],
+    // users:[],
     isLoaded:false,
     index : 5,
+    username: Cookies.get('JWT-TOKEN')
   }
 
   OnClick = (num) =>{
@@ -48,10 +50,12 @@ class Summary extends Component {
       }
     }
     this.props.setBilling(billing);
+    console.log(this.state.username)
   }
 
   componentDidMount(){
     this.props.getData();
+    Cookies.set('name', 'value');
     // const name = {"name" : "tiger"}
     // const _this=this;    //先存一下this，以防使用箭头函数this会指向我们不希望它所指向的对象。
     // axios.post('http://localhost:8081/time/getTimeSheet',name)
@@ -83,7 +87,6 @@ class Summary extends Component {
           <th>Approval Status</th>
           <th>Option</th>
           <th>Comment</th>
-          <th>{this.props.init}</th>
         </tr>
       </MDBTableHead>
       <MDBTableBody>
