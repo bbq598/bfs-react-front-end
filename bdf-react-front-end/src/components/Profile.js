@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { MDBContainer, MDBCol, MDBRow, MDBCard, MDBCardUp,  MDBBtn, MDBCardBody, MDBAvatar, MDBRotatingCard, MDBIcon,MDBInput } from "mdbreact";
 import axios from 'axios';
 import {connect} from 'react-redux';
-import {  getContact, setContact, setIncrease } from '../actions/action';
+import {  getContact, setContact, setIncrease,setContact1,setContact2,setContact3,setContact4,setContact5,setContact6,setContact7,setContact8,setContact9  } from '../actions/action';
+import api from '../api';
 
 class Profile extends Component {
 
@@ -12,26 +13,14 @@ class Profile extends Component {
       users:[],
       isLoaded:false,
       flipped1: false,
-      cont:{
-        phone : "1001001000",
-        email : "test@test.com",
-        homeAddress : "123 Fake Home Address, SomeCity, Some State 00000",
-        ec1FirstName : "Emer",
-        ec1LastName : "gency",
-        ec1Phone : "91191191111",
-        ec2Firstname: "Another",
-        ec2LastName: "Emergency",
-        ec2Phone : "1191191119",
-      },
     }
   }
 
   state={
-
+    cont:null,
       isLoaded:false,
       flipped1: false,
       value: "ok",
-
     }
 
 
@@ -47,81 +36,79 @@ class Profile extends Component {
 
       
 
+      setCont(){
+        if(this.state.cont == null){
+            this.setState({
+              cont : this.props.contact
+            })
+        }
+      }
 
-
-
-      componentDidMount(){
+    componentDidMount(){
         console.log("did mount");
         this.props.setContact();
         this.setState({
           cont : this.props.contact
         });
-        console.log(this.state.cont);
+        console.log("this . props . contact " + this.props.contact)
+        console.log("this . state . cont " + this.state.cont);
       }
 
 
     handleInput = (obj)=>{
-        const data = Object.assign({},this.state.cont,{phone:obj.target.value});
-        this.setState({
-          cont : data
-        });
+      this.props.setContact1(obj.target.value);
     }
 
     handleInput2 = (obj)=>{
-      const data = Object.assign({},this.state.cont,{email:obj.target.value});
-      this.setState({
-        cont : data
-      });
+      this.props.setContact2(obj.target.value);
   }
 
 
   handleInput3 = (obj)=>{
-    const data = Object.assign({},this.state.cont,{homeAddress:obj.target.value});
-    this.setState({
-      cont : data
-    });
+    this.props.setContact3(obj.target.value);
 }
 
 handleInput4 = (obj)=>{
-  const data = Object.assign({},this.state.cont,{ec1FirstName:obj.target.value});
-  this.setState({
-    cont : data
-  });
+  this.props.setContact4(obj.target.value);
 }
     
 handleInput5 = (obj)=>{
-  const data = Object.assign({},this.state.cont,{ec1LastName:obj.target.value});
-  this.setState({
-    cont : data
-  });
+  this.props.setContact5(obj.target.value);
 }
 handleInput6 = (obj)=>{
-  const data = Object.assign({},this.state.cont,{ec1Phone:obj.target.value});
-  this.setState({
-    cont : data
-  });
+  this.props.setContact6(obj.target.value);
+
 }
 
 handleInput7 = (obj)=>{
-  const data = Object.assign({},this.state.cont,{ec2FirstName:obj.target.value});
-  this.setState({
-    cont : data
-  });
+  this.props.setContact7(obj.target.value);
+
 }
 handleInput8 = (obj)=>{
-  const data = Object.assign({},this.state.cont,{ec2LastName:obj.target.value});
-  this.setState({
-    cont : data
-  });
+  this.props.setContact8(obj.target.value);
 }
 handleInput9 = (obj)=>{
-  const data = Object.assign({},this.state.cont,{ec2Phone:obj.target.value});
-  this.setState({
-    cont : data
-  });
+  this.props.setContact9(obj.target.value);
+
 }
+
+onSubmit = () =>{
+  this.setCont(); 
+  api.post('http://localhost:8081/employee/updateContactById',this.props.contactTemp).then(res => {
+    const { data } = res;
+    console.log(data);
+})
+window.location.reload(true);
+}
+
+
     onClick = ()=>{
-      console.log(this.state.cont);
+      // this.setCont(); 
+      // console.log("this . state . contact " + typeof this.state.cont)
+      // console.log(this.state.cont);
+      // console.log("this . props . contact " + typeof this.props.cont)
+      // console.log(this.props.contact);
+      console.log(this.props.contactTemp)
     }
 
 
@@ -196,7 +183,7 @@ handleInput9 = (obj)=>{
                   <MDBBtn color="warning" onClick={this.handleFlipping(1)}>
                     Back
                   </MDBBtn>
-                  <MDBBtn color="warning" outline type="submit">
+                  <MDBBtn color="warning" onClick={this.onSubmit}>
                     Send
                   </MDBBtn>
                   <MDBBtn color="warning" onClick={this.onClick}>
@@ -226,6 +213,7 @@ const mapStateToProps = (state) =>{
       counter : state.counter,
       clickTimes : state.clickTimes,
       contact : state.contact,
+      contactTemp : state.contactTemp
   }
 };
 
@@ -233,6 +221,15 @@ const mapDispatchToProps = (dispatch) =>{
   return{
       increase: (payload) => dispatch(setIncrease(payload)),
       setContact : ()=>dispatch(getContact()),
+      setContact1 : (payload) =>dispatch(setContact1(payload)),
+      setContact2 : (payload) =>dispatch(setContact2(payload)),
+      setContact3 : (payload) =>dispatch(setContact3(payload)),
+      setContact4 : (payload) =>dispatch(setContact4(payload)),
+      setContact5 : (payload) =>dispatch(setContact5(payload)),
+      setContact6 : (payload) =>dispatch(setContact6(payload)),
+      setContact7 : (payload) =>dispatch(setContact7(payload)),
+      setContact8 : (payload) =>dispatch(setContact8(payload)),
+      setContact9 : (payload) =>dispatch(setContact9(payload)),
   }
 };
 
