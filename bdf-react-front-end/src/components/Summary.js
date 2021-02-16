@@ -56,6 +56,8 @@ class Summary extends Component {
 
   componentDidMount(){
     this.props.getData();
+    this.props.setTimeSheet(this.props.user[this.props.index]);
+
     // Cookies.set('name', 'value');
     // const name = {"name" : "tiger"}
     // const _this=this;    //先存一下this，以防使用箭头函数this会指向我们不希望它所指向的对象。
@@ -112,7 +114,16 @@ class Summary extends Component {
                        : ""  } </td> 
                       <td>{item.approvalStatus} </td> 
                       <td > <MDBBtn gradient="peach" onClick={()=>this.handleSetIndex(index)}>{item.submissionStatus == "Incomplete"|| item.submissionStatus == "Not Start" ? "edit":"view"}</MDBBtn></td>
-                      <td>{item.floatingDay > 0 && item.submissionStatus == "Incomplete"? item.floatingDay + " floating day required" : " " }</td>
+                      <td>{item.floatingDay > 0 && item.submissionStatus == "Incomplete"?<MDBTooltip
+                        domElement
+                        tag="span"
+                        material
+                        placement="top"
+                        >        
+                       <span><MDBBadge color="danger" className="ml-2">{item.floatingDay} floating day required !</MDBBadge></span>
+                       <span>you only have {item.floatDayLeft} floating day left this year</span>
+                       </MDBTooltip>
+                        : " " }</td>
                     </tr>                                  
                     )
                   }

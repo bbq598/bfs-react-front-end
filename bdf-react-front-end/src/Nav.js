@@ -6,6 +6,7 @@ import {
   
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import {Link} from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 
 
@@ -16,6 +17,11 @@ state = {
 
 toggleCollapse = () => {
   this.setState({ isOpen: !this.state.isOpen });
+}
+
+handleOnClick = () =>{
+  Cookies.remove('JWT-TOKEN');
+  window.location.reload(true);
 }
 
 render() {
@@ -39,10 +45,10 @@ render() {
             <MDBNavItem>
               <MDBDropdown>
                 <MDBDropdownToggle nav caret>
-                  <span className="mr-2">Dropdown</span>
+                  <span className="mr-2">More Action</span>
                 </MDBDropdownToggle>
                 <MDBDropdownMenu>
-                  <MDBDropdownItem href="#!">Action</MDBDropdownItem>
+                  <MDBDropdownItem onClick={this.handleOnClick}>LogOut</MDBDropdownItem>
                   <MDBDropdownItem href="#!">Another Action</MDBDropdownItem>
                   <MDBDropdownItem href="#!">Something else here</MDBDropdownItem>
                   <MDBDropdownItem href="#!">Something else here</MDBDropdownItem>
