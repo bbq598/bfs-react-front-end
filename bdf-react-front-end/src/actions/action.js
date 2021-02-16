@@ -39,7 +39,12 @@ export const getData = () => {
     }
 }
 
-
+export const setTimeSheet = (payload) =>{
+    return{
+        type :'SETTIMESHEET',
+        payload
+    }
+}
 export const setContact = (payload) =>{
     return{
         type:"SETCONTACT",
@@ -47,6 +52,12 @@ export const setContact = (payload) =>{
     }
 }
 
+export const setBilling = (payload) =>{
+    return{
+        type :'SETBILLING',
+        payload
+    }
+}
 
 export const getContact = () => {
     return (dispatch) => {

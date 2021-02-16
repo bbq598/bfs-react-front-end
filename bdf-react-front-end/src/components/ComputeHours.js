@@ -7,11 +7,11 @@ export default class ComputeHours extends Component {
         <MDBRow>
           <MDBCol>Total Billing Hours</MDBCol>
           <MDBCol size="3">
-            <input type="number" id="totalBilling" name="totalBilling" value="32" readOnly/>
+            <input type="number" id="totalBilling" name="totalBilling" value={this.props.billing} readOnly/>
           </MDBCol>
           <MDBCol>Total Compensated Hours</MDBCol>
           <MDBCol size="3">
-            <input type="number" id="totalCompensated" name="totalCompensated" value="40" readOnly/>
+            <input type="number" id="totalCompensated" name="totalCompensated" value={this.props.compensated} readOnly/>
           </MDBCol>
         </MDBRow>
       )

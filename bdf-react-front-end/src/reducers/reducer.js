@@ -5,6 +5,8 @@ const initialState = {
     clickTimes: 0,
     user:[],
     index : 0,
+    currentTimeSheet: null,
+    billingHours:-1,
     contact : "null",
     contactTemp: "null",
 }
@@ -45,6 +47,20 @@ export default function appReducer(state = initialState, action){
             }
         }
 
+        case 'SETTIMESHEET' : {
+            return{
+                ...state,
+                currentTimeSheet: action.payload,
+            }
+        }
+        
+        case 'SETBILLING' : {
+            return{
+                ...state,
+                billingHours: action.payload,
+            }
+        }
+        
         case 'SETCONTACT' : {
             return{
                 ...state,
