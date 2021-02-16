@@ -61,6 +61,7 @@ export default class TimeSheetDay extends Component {
                   id={"start_"+dayOfWeek}
                   value={selectedStart}
                   onChange={(e)=>this.refreshChangeHandler(e)}
+                  disabled={this.props.approvalStatus=="Approved"}
                   >
                   {hourSelectMaker()}
                 </select>
@@ -70,6 +71,7 @@ export default class TimeSheetDay extends Component {
                   id={"end_"+dayOfWeek}
                   value={selectedEnd}
                   onChange={(e)=>this.refreshChangeHandler(e)}
+                  disabled={this.props.approvalStatus=="Approved"}
                   >
                   {hourSelectMaker()}
                 </select>
@@ -79,6 +81,7 @@ export default class TimeSheetDay extends Component {
                   id={"hours_"+dayOfWeek}
                   value={dayInfo.hours}
                   onChange={(e)=>this.refreshChangeHandler(e)}
+                  disabled={this.props.approvalStatus=="Approved"}
                   >
                   {totalHourItems}
                 </select>
@@ -89,6 +92,7 @@ export default class TimeSheetDay extends Component {
                   id={floatingCheckId}
                   checked={dayInfo.floatingDate}
                   onChange={(e)=>this.refreshChangeHandler(e)}
+                  disabled={this.props.approvalStatus=="Approved"}
                   />
                   <label className="custom-control-label" htmlFor={floatingCheckId}></label>
                 </div>
@@ -110,6 +114,7 @@ export default class TimeSheetDay extends Component {
                   id={vacationCheckId}
                   checked={dayInfo.vacation}
                   onChange={(e)=>this.refreshChangeHandler(e)}
+                  disabled={this.props.approvalStatus=="Approved"}
                   />
                   <label className="custom-control-label" htmlFor={vacationCheckId}></label>
                 </div>
