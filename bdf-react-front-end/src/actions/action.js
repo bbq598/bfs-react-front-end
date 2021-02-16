@@ -36,6 +36,11 @@ export const getData = () => {
             dispatch(action);
             console.log(data);
         })
+        .catch( (error) =>{
+            if(error.response.status === 2200){
+                window.location.href = 'http://localhost:9999/auth?redirect=http://localhost:3000';
+            }
+          })
     }
 }
 
@@ -63,11 +68,16 @@ export const getContact = () => {
     return (dispatch) => {
         const userId = {"userId" : "1"}
         api.post('http://localhost:8081/employee/getContactByUserId',userId).then(res => {
+
             const { data } = res;
-            console.log(" res type at fetch : " + typeof res)
             const action = setContact(data);
             dispatch(action);
         })
+        .catch( (error) =>{
+            if(error.response.status === 2200){
+                window.location.href = 'http://localhost:9999/auth?redirect=http://localhost:3000';
+            }
+          })
     }
 }
 
