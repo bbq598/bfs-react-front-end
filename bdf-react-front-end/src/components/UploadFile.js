@@ -7,13 +7,13 @@ export default class UploadFile extends Component {
       return (
         <MDBRow>
           <MDBCol size="6" middle>
-            <select>
+            <select disabled>
               <option defaultValue>approved timesheet</option>
               <option>unapproved timesheet</option>
             </select>
           </MDBCol>
           <MDBCol size="6" middle>
-            <input type="file"/>
+            <input type="file" disabled/>
           </MDBCol>
         </MDBRow>
       )

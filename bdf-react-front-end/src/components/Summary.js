@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { MDBTable, MDBTableBody, MDBTableHead } from 'mdbreact';
 import axios from 'axios';
 import { MDBTooltip, MDBBadge, MDBContainer,MDBBtn,MDBIcon } from "mdbreact";
-import { setIndex, setData,getData } from '../actions/action';
+import { setIndex, setData,getData, setTimeSheet, setBilling } from '../actions/action';
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux'
 import storage from 'redux-persist/lib/storage';
@@ -33,7 +33,25 @@ class Summary extends Component {
 
   handleSetIndex = (index) =>{
     this.props.setIndex(index);
-    console.log(this.state.username)
+    this.props.setTimeSheet(this.props.user[index]);
+    
+    // recompute billing hours upon loading new timesheet
+    var currTimeSheet = this.props.user[index];
+    var billing=0;
+    const hourMap = {"N/A": NaN}
+    for (var i=0; i<10; i++) { hourMap["0"+i+":00"]=i; }
+    for (var i=10; i<24; i++) { hourMap[i+":00"]=i; }
+    for (var day=0; day<7; day++) {
+      if (!currTimeSheet.days[day].floatingDate && !currTimeSheet.days[day].holiday && !currTimeSheet.days[day].vacation){
+        // compute work hours
+        var hr = hourMap[currTimeSheet.days[day].end]-hourMap[currTimeSheet.days[day].start];
+        if (isNaN(hr) || hr<0) hr=0;
+        billing+=hr;
+      }
+    }
+    this.props.setBilling(billing);
+    console.log(this.state.username);
+    this.props.history.push('/timesheet'); // go to timesheet page
   }
 
   componentDidMount(){
@@ -125,6 +143,8 @@ const mapDispatchToProps = (dispatch) =>{
       setData: (payload) => dispatch(setData(payload)),
       setIndex: (payload) => dispatch(setIndex(payload)),
       getData : () => dispatch(getData()),
+      setTimeSheet: (payload) => dispatch(setTimeSheet(payload)),
+      setBilling: (payload) => dispatch(setBilling(payload)),
   }
 };
 
