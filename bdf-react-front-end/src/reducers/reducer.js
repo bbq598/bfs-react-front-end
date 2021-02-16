@@ -86,6 +86,13 @@ export default function appReducer(state = initialState, action){
             }
         }    
 
+        case 'CHANGEDATA' :{
+            return{
+                ...state,
+                contactTemp : state.contact,
+            }
+        }
+
 
         case 'SETCONTACT3' :{
             const data = Object.assign({},state.contactTemp,{homeAddress:action.payload});

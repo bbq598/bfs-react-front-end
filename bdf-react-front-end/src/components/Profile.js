@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { MDBContainer, MDBCol, MDBRow, MDBCard, MDBCardUp,  MDBBtn, MDBCardBody, MDBAvatar, MDBRotatingCard, MDBIcon,MDBInput } from "mdbreact";
 import axios from 'axios';
 import {connect} from 'react-redux';
-import {  getContact, setContact, setIncrease,setContact1,setContact2,setContact3,setContact4,setContact5,setContact6,setContact7,setContact8,setContact9  } from '../actions/action';
+import {  getContact, setContact, setIncrease,setContact1,setContact2,setContact3,setContact4,setContact5,setContact6,setContact7,setContact8,setContact9,changeData  } from '../actions/action';
 import api from '../api';
 
 class Profile extends Component {
@@ -25,6 +25,9 @@ class Profile extends Component {
 
 
       handleFlipping = id => () => {
+        this.props.changeData();
+        console.log(this.props.contact)
+        console.log(this.props.contactTemp)
         const cardId = `flipped${id}`;
         this.setState({ [cardId]: !this.state[cardId] });
       }
@@ -47,11 +50,6 @@ class Profile extends Component {
     componentDidMount(){
         console.log("did mount");
         this.props.setContact();
-        this.setState({
-          cont : this.props.contact
-        });
-        console.log("this . props . contact " + this.props.contact)
-        console.log("this . state . cont " + this.state.cont);
       }
 
 
@@ -97,13 +95,14 @@ onSubmit = () =>{
   api.post('http://localhost:8081/employee/updateContactById',this.props.contactTemp).then(res => {
     const { data } = res;
     console.log(data);
+    this.props.setContact();
+    window.location.reload(true);
 })
 .catch( (error) =>{
   if(error.response.status === 2200){
       window.location.href = 'http://localhost:9999/auth?redirect=http://localhost:3000';
   }
 })
-window.location.reload(true);
 }
 
 
@@ -160,29 +159,29 @@ window.location.reload(true);
             <label htmlFor="defaultFormContactNameEx" className="grey-text">
              Contact
             </label>
-            <input type="text" id="defaultFormContactNameEx" className="form-control" defaultValue={this.props.contact.phone} onInput={this.handleInput}/>
+            <input type="text" id="defaultFormContactNameEx" className="form-control" defaultValue={this.props.contactTemp.phone} onInput={this.handleInput}/>
             <br />
-            <input type="text" id="defaultFormContactNameEx" className="form-control" defaultValue={this.props.contact.email} onInput={this.handleInput2}/>
+            <input type="text" id="defaultFormContactNameEx" className="form-control" defaultValue={this.props.contactTemp.email} onInput={this.handleInput2}/>
             <br />
-            <textarea type="text" id="defaultFormContactMessageEx" className="form-control" rows="3" defaultValue={this.props.contact.homeAddress} onInput={this.handleInput3}/>
+            <textarea type="text" id="defaultFormContactMessageEx" className="form-control" rows="3" defaultValue={this.props.contactTemp.homeAddress} onInput={this.handleInput3}/>
             <br />
         <label htmlFor="defaultFormContactEmailEx" className="grey-text">
              Emergency Contact 1: 
             </label>
-           <input type="text" id="defaultFormContactEmailEx" className="form-control" defaultValue={this.props.contact.ec1FirstName} onInput={this.handleInput4}/>
+           <input type="text" id="defaultFormContactEmailEx" className="form-control" defaultValue={this.props.contactTemp.ec1FirstName} onInput={this.handleInput4}/>
             <br />
-            <input type="text" id="defaultFormContactEmailEx" className="form-control" defaultValue={ this.props.contact.ec1LastName} onInput={this.handleInput5}/><br/>
+            <input type="text" id="defaultFormContactEmailEx" className="form-control" defaultValue={ this.props.contactTemp.ec1LastName} onInput={this.handleInput5}/><br/>
 
-            <input type="text" id="defaultFormContactEmailEx" className="form-control" defaultValue={this.props.contact.ec1Phone} onInput={this.handleInput6}/>
+            <input type="text" id="defaultFormContactEmailEx" className="form-control" defaultValue={this.props.contactTemp.ec1Phone} onInput={this.handleInput6}/>
             <br />
             <label htmlFor="defaultFormContactSubjectEx" className="grey-text" >
             Emergency Contact 2:
            </label>
-              <input type="text" id="defaultFormContactSubjectEx" className="form-control" defaultValue={this.props.contact.ec2FirstName } onInput={this.handleInput7}/>
+              <input type="text" id="defaultFormContactSubjectEx" className="form-control" defaultValue={this.props.contactTemp.ec2FirstName } onInput={this.handleInput7}/>
               <br />
-              <input type="text" id="defaultFormContactSubjectEx" className="form-control" defaultValue={ this.props.contact.ec2LastName} onInput={this.handleInput8}/> <br/>
+              <input type="text" id="defaultFormContactSubjectEx" className="form-control" defaultValue={ this.props.contactTemp.ec2LastName} onInput={this.handleInput8}/> <br/>
 
-              <input type="text" id="defaultFormContactSubjectEx" className="form-control" defaultValue={this.props.contact.ec2Phone} onInput={this.handleInput9}/>
+              <input type="text" id="defaultFormContactSubjectEx" className="form-control" defaultValue={this.props.contactTemp.ec2Phone} onInput={this.handleInput9}/>
               <br />
               <div className="text-center mt-4">
                   <MDBBtn color="warning" onClick={this.handleFlipping(1)}>
@@ -235,6 +234,7 @@ const mapDispatchToProps = (dispatch) =>{
       setContact7 : (payload) =>dispatch(setContact7(payload)),
       setContact8 : (payload) =>dispatch(setContact8(payload)),
       setContact9 : (payload) =>dispatch(setContact9(payload)),
+      changeData: ()=> dispatch(changeData()),
   }
 };
 

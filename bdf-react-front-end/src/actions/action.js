@@ -80,6 +80,14 @@ export const getContact = () => {
 }
 
 
+export const changeData =()=>{
+    return {
+        type : "CHANGEDATA",
+        
+    }
+}
+
+
 export const setContact1 =(payload)=>{
     return {
         type : "SETCONTACT1",
