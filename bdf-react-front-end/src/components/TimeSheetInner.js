@@ -23,6 +23,7 @@ export class TimeSheetInner extends Component {
             days.push(<TimeSheetDay
                         dayInfo = {day}
                         dayOfWeek = {ind} key={ind}
+                        approvalStatus = {this.props.currentTimeSheet.approvalStatus}
                         onChangeHandler= {(e)=>this.props.onChangeHandler(e)}
                         ></TimeSheetDay>);
         }
