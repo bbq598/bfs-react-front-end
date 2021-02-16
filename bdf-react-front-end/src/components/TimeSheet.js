@@ -6,8 +6,8 @@ import TimeSheetInner from './TimeSheetInner'
 import WeekSelect from './WeekSelect'
 import UploadFile from './UploadFile'
 import ComputeHours from './ComputeHours'
-import axios from 'axios'
-import { setTimeSheet, setBilling } from '../actions/action'
+import api from '../api'
+import { setTimeSheet, setBilling, getData } from '../actions/action'
 
 // represents the entire timesheet page
 export class TimeSheet extends Component {
@@ -59,14 +59,14 @@ export class TimeSheet extends Component {
 
     postTimeSheet(e) {
       e.preventDefault();
-      var updateUrl = "http://localhost:8081/time/updateTimesheet";
-      // var updateUrl = "";
-      axios
+      var updateUrl = "http://localhost:8081/time/updateWeekSheet";
+      api
           .post(updateUrl, this.props.currentTimeSheet)
           .then((resp)=>{
             console.log(resp);
             window.alert("Save successful!");
-            window.location.reload();
+            this.props.history.push('/'); // go to homepage, refresh and load data
+            this.props.history.push('/timesheet'); // go to timesheet page
           })
           .catch((err)=>{
             console.log(err);
@@ -77,7 +77,17 @@ export class TimeSheet extends Component {
     setDefault = (e) => {
       var currTimeSheet = this.props.currentTimeSheet;
       // api call
-      window.alert("API call to set default timesheet!")
+      var setDefaultUrl = "http://localhost:8081/time/setDefault";
+      api
+          .post(setDefaultUrl, currTimeSheet)
+          .then((resp)=>{
+            console.log(resp);
+            window.alert("New default set successfully!");
+          })
+          .catch((err)=>{
+            console.log(err);
+            window.alert("Error posting!");
+          });
     }
 
     onChangeHandler = (e) => {
@@ -90,16 +100,19 @@ export class TimeSheet extends Component {
       var currTimeSheet = this.props.currentTimeSheet;
       const [field, dayIdx] = e.target.id.split('_');
       const value = (e.target.type=="checkbox")?e.target.checked:e.target.value;
-      if (field!="totalHours") currTimeSheet.days[dayIdx][field] = value;
+      currTimeSheet.days[dayIdx][field] = value;
+      
       // update other affected values
-      if (e.target.type=="checkbox" && dayIdx!=0 && dayIdx!=6) {
-        currTimeSheet.days[dayIdx].start=value?"N/A":"09:00";
-        currTimeSheet.days[dayIdx].end=value?"N/A":"17:00";
+      if (e.target.type=="checkbox") {
+        var isWeekend = (dayIdx==0 || dayIdx==6);
+        currTimeSheet.days[dayIdx].start=value||isWeekend?"N/A":"09:00";
+        currTimeSheet.days[dayIdx].end=value||isWeekend?"N/A":"17:00";
+        currTimeSheet.days[dayIdx].hours=value||isWeekend?0:8;
       } else {
         currTimeSheet.days[dayIdx].floatingDate = false;
         currTimeSheet.days[dayIdx].holiday = false;
         currTimeSheet.days[dayIdx].vacation = false;
-        if (field=="totalHours") {
+        if (field=="hours") {
           if (currTimeSheet.days[dayIdx].start=="N/A") currTimeSheet.days[dayIdx].start="09:00";
           currTimeSheet.days[dayIdx].end =
             reverseHourMap[Math.min(hourMap[currTimeSheet.days[dayIdx].start]+(value-0),23)];
@@ -108,12 +121,18 @@ export class TimeSheet extends Component {
             currTimeSheet.days[dayIdx].end = "N/A";
           } else if (currTimeSheet.days[dayIdx].end=="N/A") {
             currTimeSheet.days[dayIdx].end = "17:00";
+            currTimeSheet.days[dayIdx].hours = Math.max(17-hourMap[value],0);
+          } else {
+            currTimeSheet.days[dayIdx].hours = hourMap[currTimeSheet.days[dayIdx].end]-hourMap[value];
           }
         } else if (field=="end") {
           if (value=="N/A") {
             currTimeSheet.days[dayIdx].start = "N/A";
           } else if (currTimeSheet.days[dayIdx].start=="N/A") {
             currTimeSheet.days[dayIdx].start = "09:00";
+            currTimeSheet.days[dayIdx].hours = Math.max(hourMap[value]-9,0);
+          } else {
+            currTimeSheet.days[dayIdx].hours = hourMap[value]-hourMap[currTimeSheet.days[dayIdx].start];
           }
         }
       }
@@ -152,6 +171,7 @@ const mapDispatchToProps = (dispatch) =>{
   return{
       setTimeSheet: (payload) => dispatch(setTimeSheet(payload)),
       setBilling: (payload) => dispatch(setBilling(payload)),
+      getData : () => dispatch(getData()),
   }
 };
 

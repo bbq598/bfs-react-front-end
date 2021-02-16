@@ -38,8 +38,10 @@ export default class TimeSheetDay extends Component {
         const dayOfWeek = this.props.dayOfWeek;
         const dayMap = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
         const isWeekend = (dayOfWeek == 0 || dayOfWeek == 6);
-        const selectedStart = (dayInfo.start=="N/A")?(isWeekend)?"N/A":"09:00":dayInfo.start;
-        const selectedEnd = (dayInfo.end=="N/A")?(isWeekend)?"N/A":"18:00":dayInfo.end;
+        const isRest = 
+          (dayInfo.floatingDay || dayInfo.holiday || dayInfo.vacation);
+        const selectedStart = (isRest)?"N/A":dayInfo.start;
+        const selectedEnd = (isRest)?"N/A":dayInfo.end;
         const floatingCheckId = "floatingDate_"+dayOfWeek;
         const holidaysCheckId = "holiday_"+dayOfWeek;
         const vacationCheckId = "vacation_"+dayOfWeek;
@@ -47,9 +49,9 @@ export default class TimeSheetDay extends Component {
         for (var i=0; i<=24; i++) {
           totalHourItems.push(<option key={i} value={i}>{i}</option>);
         }
-        const hourDiff = (dayInfo.end!="N/A" && dayInfo.start!="N/A")
-                            ?Math.max(hourMap[dayInfo.end][0]-hourMap[dayInfo.start][0],0)
-                            :0.00;
+        // const hourDiff = (dayInfo.end!="N/A" && dayInfo.start!="N/A")
+        //                     ?Math.max(hourMap[dayInfo.end][0]-hourMap[dayInfo.start][0],0)
+        //                     :0.00;
         return (
             <tr>
               <td>{dayMap[this.props.dayOfWeek]}</td>
@@ -74,8 +76,8 @@ export default class TimeSheetDay extends Component {
               </td>
               <td>{
                 <select
-                  id={"totalHours_"+dayOfWeek}
-                  value={hourDiff}
+                  id={"hours_"+dayOfWeek}
+                  value={dayInfo.hours}
                   onChange={(e)=>this.refreshChangeHandler(e)}
                   >
                   {totalHourItems}
@@ -85,7 +87,7 @@ export default class TimeSheetDay extends Component {
                 <div className="custom-control custom-checkbox">
                   <input type="checkbox" className="custom-control-input"
                   id={floatingCheckId}
-                  defaultChecked={dayInfo.floatingDate}
+                  checked={dayInfo.floatingDate}
                   onChange={(e)=>this.refreshChangeHandler(e)}
                   />
                   <label className="custom-control-label" htmlFor={floatingCheckId}></label>
@@ -95,7 +97,7 @@ export default class TimeSheetDay extends Component {
                 <div className="custom-control custom-checkbox">
                   <input type="checkbox" className="custom-control-input"
                   id={holidaysCheckId}
-                  defaultChecked={dayInfo.holiday}
+                  checked={dayInfo.holiday}
                   onChange={(e)=>this.refreshChangeHandler(e)}
                   disabled
                   />
@@ -106,7 +108,7 @@ export default class TimeSheetDay extends Component {
                 <div className="custom-control custom-checkbox">
                   <input type="checkbox" className="custom-control-input"
                   id={vacationCheckId}
-                  defaultChecked={dayInfo.vacation}
+                  checked={dayInfo.vacation}
                   onChange={(e)=>this.refreshChangeHandler(e)}
                   />
                   <label className="custom-control-label" htmlFor={vacationCheckId}></label>

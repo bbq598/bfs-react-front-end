@@ -50,7 +50,8 @@ class Summary extends Component {
       }
     }
     this.props.setBilling(billing);
-    console.log(this.state.username)
+    console.log(this.state.username);
+    this.props.history.push('/timesheet'); // go to timesheet page
   }
 
   componentDidMount(){
