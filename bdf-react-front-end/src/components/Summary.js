@@ -25,7 +25,9 @@ class Summary extends Component {
     if(this.state.index < 6 && num < 0 ){
       num = 0;
     }
-    
+    if(this.state.index + num > this.props.user.length + 5 && num > 0){
+      num = 0;
+    }
     this.setState({
       index: this.state.index + num,
     })
@@ -133,7 +135,7 @@ class Summary extends Component {
       </MDBTableBody>
     </MDBTable>
     <center><MDBBtn color="primary" onClick={() => this.OnClick(-5)}>Show Less</MDBBtn>
-    <MDBBtn color="primary" onClick={()=>this.OnClick(5)}>Show More {this.props.index}</MDBBtn></center>
+    <MDBBtn color="primary" onClick={()=>this.OnClick(5)}>Show More</MDBBtn></center>
 
       </div>
     )

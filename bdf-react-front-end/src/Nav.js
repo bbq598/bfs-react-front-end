@@ -28,7 +28,7 @@ render() {
   return (
       <MDBNavbar color="indigo" dark expand="md">
         <MDBNavbarBrand>
-          <strong className="white-text">Navbar</strong>
+          <strong className="white-text">BFS</strong>
         </MDBNavbarBrand>
         <MDBNavbarToggler onClick={this.toggleCollapse} />
         <MDBCollapse id="navbarCollapse3" isOpen={this.state.isOpen} navbar>
@@ -49,9 +49,6 @@ render() {
                 </MDBDropdownToggle>
                 <MDBDropdownMenu>
                   <MDBDropdownItem onClick={this.handleOnClick}>LogOut</MDBDropdownItem>
-                  <MDBDropdownItem href="#!">Another Action</MDBDropdownItem>
-                  <MDBDropdownItem href="#!">Something else here</MDBDropdownItem>
-                  <MDBDropdownItem href="#!">Something else here</MDBDropdownItem>
                 </MDBDropdownMenu>
               </MDBDropdown>
             </MDBNavItem>
